@@ -38,7 +38,7 @@ public class HBaseOperations {
             Scan scan = new Scan();
             ResultScanner scanner = table.getScanner(scan);
             for (Result result : scanner) {
-                System.out.println("Row: " + Bytes.toString(result.getRow()));
+                System.out.println("[wold9168]Row: " + Bytes.toString(result.getRow()));
                 for (Cell cell : result.rawCells()) {
                     String family = Bytes.toString(CellUtil.cloneFamily(cell));
                     String qualifier = Bytes.toString(CellUtil.cloneQualifier(cell));
@@ -57,7 +57,7 @@ public class HBaseOperations {
             TableDescriptorBuilder builder = TableDescriptorBuilder.newBuilder(tableDesc);
             builder.setColumnFamily(ColumnFamilyDescriptorBuilder.of(columnFamily));
             admin.modifyTable(builder.build());
-            System.out.println("列族 " + columnFamily + " 添加成功");
+            System.out.println("[wold9168]cf " + columnFamily + " add success");
         }
     }
 
@@ -71,7 +71,7 @@ public class HBaseOperations {
             builder.removeColumnFamily(Bytes.toBytes(columnFamily));
             admin.modifyTable(builder.build());
             admin.enableTable(TableName.valueOf(tableName));
-            System.out.println("列族 " + columnFamily + " 删除成功");
+            System.out.println("[wold9168]cf " + columnFamily + " delete success");
         }
     }
 
@@ -81,7 +81,7 @@ public class HBaseOperations {
                 Admin admin = conn.getAdmin()) {
             admin.disableTable(TableName.valueOf(tableName));
             admin.truncateTable(TableName.valueOf(tableName), true);
-            System.out.println("表 " + tableName + " 数据已清空");
+            System.out.println("[wold9168]table " + tableName + " is cleared");
         }
     }
 
@@ -103,7 +103,7 @@ public class HBaseOperations {
 
     // 主方法测试
     public static void main(String[] args) throws IOException {
-        String tableName = "my_table";
+        String tableName = "test_table";
         String columnFamily = "cf2";
 
         // 任务1：列出所有表
@@ -114,15 +114,16 @@ public class HBaseOperations {
 
         // 任务3：添加列族
         addColumnFamily(tableName, columnFamily);
-
-        // 任务3：删除列族（示例）
-        // deleteColumnFamily(tableName, "cf1");
+        String deleteColumnFamily = "cf3";
+        // 任务3：删除列族
+        deleteColumnFamily(tableName, deleteColumnFamily);
 
         // 任务4：清空表
-        // truncateTable(tableName);
+        truncateTable(tableName);
 
         // 任务5：统计行数
-        long count = countRows(tableName);
-        System.out.println("表 " + tableName + " 行数: " + count);
+        String countTableName = "count_table";
+        long count = countRows(countTableName);
+        System.out.println("[wold9168] " + countTableName + " linecount: " + count);
     }
 }
